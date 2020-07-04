@@ -1,0 +1,32 @@
+service: cakehut-web-app
+
+plugins:
+  - serverless-finch
+  - serverless-build-client
+  - serverless-plugin-scripts
+
+custom:
+  buildClient:
+    packager: npm
+    command: run build
+    verbose: true
+  client:
+    bucketName: dev-cakehut-s3-webapp-bucket
+    distributionFolder: build
+    indexDocument: index.html
+    errorDocument: index.html
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  environment:
+    REACT_APP_BACKEND_ENDPOINT: ${cf:cakehut-web-services-dev.ServiceEndpoint}
+    APIG_UID: !Ref "ApiGatewayRestApi"
+    APIG_URL: !Join
+      - ""
+      - - "https://"
+        - !Ref ApiGatewayRestApi
+        - ".execute-api."
+        - ${opt:region, self:provider.region}
+        - ".amazonaws.com/"
+        - ${opt:stage, self:provider.stage}

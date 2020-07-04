@@ -1,0 +1,11 @@
+cakehut-web-app/build
+# package directories
+node_modules
+jspm_packages
+
+# Serverless directories
+.serverless
+
+# Webpack directories
+.webpack
+cakehut-web-services/node_modules
